@@ -1,22 +1,14 @@
-import Navbar from '@/pages/navbar'
-import Sidebar from '@/pages/sidebar'
-import Feed from '@/pages/feed'
-import { Grid, ThemeProvider } from '@mui/material'
-import theme from '@/theme'
+import Layout from '@/pages/layout'
+import Search from '@/pages/search'
+import { Routes, Route, Navigate } from 'react-router-dom'
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <Grid container>
-        <Grid item xs={2}>
-          <Sidebar />
-        </Grid>
-        <Grid item xs={10}>
-          <Navbar />
-          <Feed />
-        </Grid>
-      </Grid>
-    </ThemeProvider>
+    <Routes>
+      <Route path="/" element={<Layout />}></Route>
+      <Route path="/search" element={<Search />}></Route>
+      <Route path="*" element={<Navigate to={'/'} />}></Route>
+    </Routes>
   )
 }
 
