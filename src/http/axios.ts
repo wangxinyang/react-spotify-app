@@ -11,29 +11,33 @@ interface ResultData<T> extends Result {
 }
 
 const instance = axios.create({
-  baseURL: '',
-  timeout: 1000,
+  baseURL: 'http://localhost:3000',
+  timeout: 2000,
   withCredentials: true,
 })
 
 instance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token') || ''
-    return {
-      ...config,
-      headers: {
-        'x-access-token': token, // 请求头中携带token信息
-      },
+    if (config.method == 'post') {
+      config.data = {
+        ...config.data,
+        _t: Date.parse(new Date() + '') / 1000,
+      }
     }
+    // const token = localStorage.getItem('token') || ''
+    // return {
+    //   ...config,
+    //   headers: {
+    //     'x-access-token': token, // 请求头中携带token信息
+    //   },
+    // }
+    return config
   },
   (error) => Promise.reject(error)
 )
 
 instance.interceptors.response.use(
-  (response) => {
-    const { data, config } = response
-    return data
-  },
+  (response) => response,
   (error) => Promise.reject(error)
 )
 
