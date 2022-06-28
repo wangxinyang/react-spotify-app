@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { styled, Typography } from '@mui/material'
 import { get } from '@/http'
 import { Play } from '@/assets/svg'
+import { useNavigate } from 'react-router-dom'
 
 const ListItemBody = styled('div')({
   display: 'flex',
@@ -115,10 +116,18 @@ function FeedBody({ cat, limit = 7 }: FeedBodyProps) {
     )
   }, [cat])
 
+  const navigate = useNavigate()
+  const handleClickItem = (id: string | number) => {
+    navigate(`playlist/track/all/${id}`)
+  }
+
   return (
     <ListItemBody>
       {playlists?.map((playlist) => (
-        <ListItem key={playlist.id}>
+        <ListItem
+          key={playlist.id}
+          onClick={() => handleClickItem(`${playlist.id}`)}
+        >
           <ListItemCenter>
             <PlayListImageContainer>
               <CustomizedImage src={playlist.coverImgUrl} alt="" />

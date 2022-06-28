@@ -1,2 +1,5 @@
+export { default as Clock } from './Clock'
+export { default as Dot } from './Dot'
+export { default as Favourite } from './Favourite'
 export { default as Logo } from './Logo'
 export { default as Play } from './Play'

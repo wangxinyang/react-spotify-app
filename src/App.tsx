@@ -9,7 +9,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<Feed />} />
-        <Route path="playlist/track/all" element={<PlayInfo />} />
+        <Route path="playlist/track/all/:id" element={<PlayInfo />} />
       </Route>
       <Route path="/search" element={<Search />}></Route>
       <Route path="*" element={<Navigate to={'/'} />}></Route>
