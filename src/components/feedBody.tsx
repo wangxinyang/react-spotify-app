@@ -114,6 +114,7 @@ function FeedBody({ cat, limit = 7 }: FeedBodyProps) {
       }
     )
   }, [cat])
+
   return (
     <ListItemBody>
       {playlists?.map((playlist) => (

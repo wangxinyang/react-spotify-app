@@ -1,8 +1,8 @@
 import React from 'react'
 import { Grid } from '@mui/material'
+import { Outlet } from 'react-router-dom'
 import Navbar from '@/components/navbar'
 import Sidebar from '@/components/sidebar'
-import Feed from '@/components/feed'
 
 function Layout() {
   return (
@@ -12,7 +12,7 @@ function Layout() {
       </Grid>
       <Grid item xs={10}>
         <Navbar />
-        <Feed />
+        <Outlet />
       </Grid>
     </Grid>
   )

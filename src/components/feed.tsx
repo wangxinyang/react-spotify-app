@@ -29,8 +29,6 @@ function Feed() {
   useEffect(() => {
     post<TagList>('/playlist/hot').then((response) => {
       const hotData = response.data
-      console.log(hotData)
-
       if (hotData?.tags) setTags(hotData.tags)
     })
   }, [])
