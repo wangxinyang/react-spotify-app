@@ -1,23 +1,15 @@
-/* eslint-disable react/no-unescaped-entities */
-import { Play, Favourite, Dot, Clock } from '@/assets/svg'
-import styled from '@emotion/styled'
-import {
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-} from '@mui/material'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+
+import styled from '@emotion/styled'
+import { Typography } from '@mui/material'
+
+import { Play, Favourite, Dot, Clock, Options } from '@/assets/svg'
 
 const PlayInfoContainer = styled('div')({
   position: 'relative',
   backgroundColor: '#131313',
-  height: '100vh',
+  height: '100%',
 })
 
 const PlayListImage = styled('div')({
@@ -51,7 +43,7 @@ const PlayBackgroundPicMask = styled('div')({
 
 const PlayListSongs = styled('div')({
   width: '100%',
-  height: 'calc(100vh - 315px)',
+  height: '100vh',
 })
 
 const PlaySongTitle = styled('div')({
@@ -121,24 +113,81 @@ const CustomizedButton = styled('div')({
   marginRight: '24px',
 })
 
-function PlayInfo() {
-  function createData(
-    name: string,
-    calories: number,
-    fat: number,
-    carbs: number,
-    protein: number
-  ) {
-    return { id: '#', name, calories, fat, carbs, protein }
-  }
+const PlaySongTable = styled('div')({
+  border: '1px solid transparent',
+  borderRadius: '4px',
+  outline: 0,
+})
 
-  const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-  ]
+const PlaySongTableTitleContainer = styled('div')({
+  position: 'sticky',
+  height: '36px',
+  borderBottom: '1px solid transparent',
+  boxSizing: 'content-box',
+  margin: '0 -32px 16px',
+  padding: '0 32px',
+  top: '64px',
+})
+
+const PlaySongTableTitle = styled('div')({
+  display: 'grid',
+  gridTemplateColumns:
+    '[index] 16px [first] 6fr [var1] 5fr [var2] 3fr [last] minmax(120px,2fr)',
+  color: '#b3b3b3',
+  height: '100%',
+  padding: '0 16px',
+  fontSize: '12px',
+  borderBottom: '1px solid #3F2428',
+})
+
+const PlaySongTableBody = styled('div')({
+  height: '100%',
+})
+
+const PlaySongTableBodyGrid = styled(PlaySongTableTitle)({
+  border: '1px solid transparent',
+  borderRadius: '4px',
+  height: '56px',
+  fontSize: '16px',
+  '#fav': {
+    display: 'none',
+  },
+  '#option': {
+    display: 'none',
+  },
+  '&:hover': {
+    color: 'white',
+    backgroundColor: 'hsla(0,0%,100%,.1)',
+    '#fav': {
+      display: 'block',
+    },
+    '#option': {
+      display: 'block',
+    },
+  },
+})
+
+const FlexDiv = styled('div')({
+  display: 'flex',
+  alignItems: 'center',
+})
+
+const CustomizedDot = styled(Dot)({
+  '&:hover': {
+    fill: 'white',
+  },
+})
+
+const CustomizedFav = styled(Favourite)({
+  '&:hover': {
+    fill: 'white',
+  },
+})
+
+function PlayInfo() {
+  const [playList, setPlayList] = useState(null)
+
+  // useEffect(() => {}, [])
 
   return (
     <PlayInfoContainer>
@@ -156,8 +205,7 @@ function PlayInfo() {
           </Typography>
           <Typography variant="h2" component="p" sx={{ fontSize: '16px' }}>
             8月6日公開『ONE PIECE FILM RED』公式プレイリスト。「ONE
-            PIECE」映画作品の主題歌集。The official playlist for "ONE PIECE FILM
-            RED". ©尾田栄一郎／2022「ワンピース」製作委員会
+            PIECE」映画作品の主題歌集。The official playlist
           </Typography>
           <PlaySongsSocial>
             <PlaySongsSocialSpan>
@@ -178,44 +226,88 @@ function PlayInfo() {
                 <CustomizedPlay />
               </CustomizedPlayButton>
               <CustomizedButton>
-                <Favourite fill="hsla(0,0%,100%,.7)" />
+                <CustomizedFav fill="hsla(0,0%,100%,.7)" />
               </CustomizedButton>
               <CustomizedButton>
-                <Dot fill="hsla(0,0%,100%,.7)" />
+                <CustomizedDot fill="hsla(0,0%,100%,.7)" />
               </CustomizedButton>
             </PlaySongHandle>
           </PlaySongHandleContainer>
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>#</TableCell>
-                  <TableCell>タイトル</TableCell>
-                  <TableCell>アルバム</TableCell>
-                  <TableCell>追加日</TableCell>
-                  <TableCell>
-                    <Clock />
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rows.map((row, index) => (
-                  <TableRow
-                    key={row.name}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell component="th" scope="row">
-                      {row.name}
-                    </TableCell>
-                    <TableCell>{row.calories}</TableCell>
-                    <TableCell>{row.fat}</TableCell>
-                    <TableCell>{row.carbs}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <PlaySongTable>
+            <PlaySongTableTitleContainer>
+              <PlaySongTableTitle>
+                <FlexDiv>#</FlexDiv>
+                <FlexDiv>タイトル</FlexDiv>
+                <FlexDiv>アルバム</FlexDiv>
+                <FlexDiv>追加日</FlexDiv>
+                <FlexDiv>
+                  <Clock fill="hsla(0,0%,100%,.7)" />
+                </FlexDiv>
+              </PlaySongTableTitle>
+              <PlaySongTableBody>
+                <PlaySongTableBodyGrid>
+                  <FlexDiv>
+                    <span>1</span>
+                  </FlexDiv>
+                  <FlexDiv>
+                    <img
+                      style={{
+                        height: '45px',
+                        width: '45px',
+                        margin: '0 15px',
+                      }}
+                      src="https://i.scdn.co/image/ab67616d0000485140e712522c3284b637fd23b5"
+                      alt=""
+                    />
+                    <span>ルフィからのスペシャルメッセージ!</span>
+                  </FlexDiv>
+                  <FlexDiv>
+                    <span>
+                      『ONE PIECE FILM RED』ルフィからのスペシャルメッセージ!
+                    </span>
+                  </FlexDiv>
+                  <FlexDiv>
+                    <span>7 日前</span>
+                  </FlexDiv>
+                  <FlexDiv style={{ gap: 20 }}>
+                    <Favourite id="fav" fill="hsla(0,0%,100%,.7)" />
+                    <span>0:32</span>
+                    <Options id="option" fill="hsla(0,0%,100%,.7)" />
+                  </FlexDiv>
+                </PlaySongTableBodyGrid>
+                <PlaySongTableBodyGrid>
+                  <FlexDiv>
+                    <span>2</span>
+                  </FlexDiv>
+                  <FlexDiv>
+                    <img
+                      style={{
+                        height: '45px',
+                        width: '45px',
+                        margin: '0 15px',
+                      }}
+                      src="https://i.scdn.co/image/ab67616d0000485140e712522c3284b637fd23b5"
+                      alt=""
+                    />
+                    <span>ルフィからのスペシャルメッセージ!</span>
+                  </FlexDiv>
+                  <FlexDiv>
+                    <span>
+                      『ONE PIECE FILM RED』ルフィからのスペシャルメッセージ!
+                    </span>
+                  </FlexDiv>
+                  <FlexDiv>
+                    <span>7 日前</span>
+                  </FlexDiv>
+                  <FlexDiv style={{ gap: 20 }}>
+                    <Favourite id="fav" fill="hsla(0,0%,100%,.7)" />
+                    <span>0:32</span>
+                    <Options id="option" fill="hsla(0,0%,100%,.7)" />
+                  </FlexDiv>
+                </PlaySongTableBodyGrid>
+              </PlaySongTableBody>
+            </PlaySongTableTitleContainer>
+          </PlaySongTable>
         </PlaySongBody>
       </PlayListSongs>
     </PlayInfoContainer>
